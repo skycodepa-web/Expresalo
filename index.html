@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exprésalo – Laboratorio Socioemocional</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #6B21A8;
+    --purple-dark: #4C1D95;
+    --purple-light: #9333EA;
+    --orange: #F59E0B;
+    --orange-bright: #F97316;
+    --teal: #14B8A6;
+    --white: #FFFFFF;
+    --cream: #FFF7ED;
+    --gray: #4B5563;
+    --light: #F3F4F6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Nunito', sans-serif; color: #1F0A3A; background: var(--white); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(76,29,149,0.97); backdrop-filter: blur(8px);
+    padding: 14px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; }
+  .nav-logo span { font-family: 'Fredoka One', cursive; font-size: 1.5rem; color: var(--white); }
+  .nav-logo span em { color: var(--orange); font-style: normal; }
+  nav ul { list-style: none; display: flex; gap: 28px; }
+  nav ul a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: color 0.2s; }
+  nav ul a:hover { color: var(--orange); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; background: var(--purple-dark);
+    position: relative; display: flex; align-items: center; justify-content: center;
+    overflow: hidden; padding-top: 80px;
+  }
+  .hero-bg-circles { position: absolute; inset: 0; pointer-events: none; }
+  .hero-bg-circles span { position: absolute; border-radius: 50%; opacity: 0.12; animation: float 6s ease-in-out infinite; }
+  .hero-bg-circles span:nth-child(1){ width:400px;height:400px;background:var(--orange);top:-100px;right:-80px;animation-delay:0s; }
+  .hero-bg-circles span:nth-child(2){ width:250px;height:250px;background:var(--teal);bottom:60px;left:-60px;animation-delay:2s; }
+  .hero-bg-circles span:nth-child(3){ width:180px;height:180px;background:var(--orange-bright);bottom:200px;right:150px;animation-delay:4s; }
+  @keyframes float { 0%,100%{ transform:translateY(0) scale(1); } 50%{ transform:translateY(-20px) scale(1.04); } }
+
+  .hero-content {
+    text-align: center; max-width: 800px; padding: 40px 24px;
+    position: relative; z-index: 2; animation: fadeUp 0.9s ease both;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
+
+  .hero-icons { margin-bottom: 24px; display: flex; gap: 20px; justify-content: center; }
+  .hero-icon-wrap {
+    width: 56px; height: 56px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    animation: pop 0.5s ease both;
+  }
+  .hero-icon-wrap:nth-child(1){ background: rgba(245,158,11,0.25); animation-delay:0.2s; }
+  .hero-icon-wrap:nth-child(2){ background: rgba(20,184,166,0.25); animation-delay:0.4s; }
+  .hero-icon-wrap:nth-child(3){ background: rgba(249,115,22,0.25); animation-delay:0.6s; }
+  .hero-icon-wrap:nth-child(4){ background: rgba(147,51,234,0.35); animation-delay:0.8s; }
+  .hero-icon-wrap svg { width: 28px; height: 28px; stroke: var(--white); }
+  @keyframes pop { from{opacity:0;transform:scale(0.3)} to{opacity:1;transform:scale(1)} }
+
+  .hero-title { font-family:'Fredoka One',cursive; font-size:clamp(3.2rem,8vw,5.5rem); color:var(--white); line-height:1; margin-bottom:10px; }
+  .hero-title em { color: var(--orange); font-style: normal; }
+  .hero-sub { font-size:1.15rem; color:rgba(255,255,255,0.8); font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:24px; }
+  .hero-desc { color:rgba(255,255,255,0.75); font-size:1.1rem; line-height:1.75; max-width:580px; margin:0 auto 36px; }
+
+  .btn { display:inline-block; padding:14px 34px; border-radius:50px; font-weight:800; font-size:1rem; text-decoration:none; transition:transform 0.2s,box-shadow 0.2s; }
+  .btn:hover { transform:translateY(-3px); box-shadow:0 8px 28px rgba(0,0,0,0.25); }
+  .btn-orange { background:var(--orange); color:var(--white); }
+  .btn-outline { background:transparent; color:var(--white); border:2px solid rgba(255,255,255,0.5); margin-left:12px; }
+
+  .hero-badges { margin-top:42px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .badge {
+    background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25);
+    color:var(--white); padding:8px 18px; border-radius:50px;
+    font-size:0.85rem; font-weight:700;
+    display:flex; align-items:center; gap:7px;
+  }
+  .badge svg { width:14px; height:14px; stroke:var(--orange); flex-shrink:0; }
+
+  /* SECTIONS */
+  section { padding: 90px 24px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-tag { display:inline-block; background:var(--orange); color:var(--white); font-size:0.78rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; padding:5px 14px; border-radius:50px; margin-bottom:14px; }
+  h2 { font-family:'Fredoka One',cursive; font-size:clamp(2rem,4vw,2.8rem); color:var(--purple-dark); margin-bottom:16px; }
+  .lead { font-size:1.1rem; color:var(--gray); line-height:1.75; max-width:700px; margin-bottom:48px; }
+
+  /* ABOUT */
+  #about { background: var(--cream); }
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center; }
+  .about-visual { background:var(--purple); border-radius:24px; padding:48px 36px; color:var(--white); position:relative; overflow:hidden; }
+  .about-visual .bg-icon { position:absolute; right:20px; top:20px; opacity:0.1; }
+  .about-visual .bg-icon svg { width:96px; height:96px; stroke:white; }
+  .about-visual h3 { font-family:'Fredoka One',cursive; font-size:1.6rem; margin-bottom:16px; }
+  .about-visual p { opacity:0.85; line-height:1.7; }
+
+  /* TEMAS */
+  #temas { background: var(--white); }
+  .temas-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  .tema-card { border-radius:20px; padding:36px 28px; position:relative; overflow:hidden; transition:transform 0.25s,box-shadow 0.25s; }
+  .tema-card:hover { transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,0.12); }
+  .tema-card:nth-child(1){ background:linear-gradient(135deg,#6B21A8,#9333EA); color:white; }
+  .tema-card:nth-child(2){ background:linear-gradient(135deg,#F59E0B,#F97316); color:white; }
+  .tema-card:nth-child(3){ background:linear-gradient(135deg,#14B8A6,#0EA5E9); color:white; }
+  .tema-card .card-icon { width:44px; height:44px; background:rgba(255,255,255,0.2); border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:18px; }
+  .tema-card .card-icon svg { width:24px; height:24px; stroke:white; }
+  .tema-card h3 { font-size:1.1rem; font-weight:800; margin-bottom:14px; }
+  .tema-card ul { list-style:none; }
+  .tema-card ul li { padding:5px 0; font-size:0.92rem; opacity:0.9; display:flex; align-items:center; gap:8px; }
+  .tema-card ul li svg { width:14px; height:14px; stroke:rgba(255,255,255,0.7); flex-shrink:0; }
+
+  /* IMPACTO */
+  #impacto { background: var(--purple-dark); }
+  #impacto h2 { color:white; }
+  #impacto .lead { color:rgba(255,255,255,0.7); }
+  .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-bottom:60px; }
+  .stat-box { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:20px; padding:32px 24px; text-align:center; transition:background 0.25s; }
+  .stat-box:hover { background:rgba(255,255,255,0.14); }
+  .stat-box .stat-icon { width:40px; height:40px; background:rgba(245,158,11,0.2); border-radius:10px; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; }
+  .stat-box .stat-icon svg { width:22px; height:22px; stroke:var(--orange); }
+  .stat-num { font-family:'Fredoka One',cursive; font-size:3rem; color:var(--orange); display:block; line-height:1; margin-bottom:8px; }
+  .stat-label { color:rgba(255,255,255,0.75); font-size:0.88rem; font-weight:700; }
+  .results-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .result-item { background:rgba(255,255,255,0.07); border-left:4px solid var(--orange); border-radius:0 14px 14px 0; padding:24px 22px; }
+  .result-item h4 { color:var(--orange); font-size:1rem; font-weight:800; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .result-item h4 svg { width:18px; height:18px; stroke:var(--orange); }
+  .result-item p { color:rgba(255,255,255,0.7); font-size:0.9rem; line-height:1.6; }
+  .result-item .pct { font-family:'Fredoka One',cursive; font-size:2rem; color:var(--white); margin-right:6px; }
+
+  /* SESIONES */
+  #sesiones { background: var(--light); }
+  .sesiones-timeline { position:relative; }
+  .sesiones-timeline::before { content:''; position:absolute; left:28px; top:0; bottom:0; width:3px; background:linear-gradient(to bottom,var(--purple),var(--orange),var(--teal)); border-radius:3px; }
+  .sesion-item { display:flex; gap:32px; margin-bottom:32px; padding-left:72px; position:relative; }
+  .sesion-dot { width:20px; height:20px; border-radius:50%; position:absolute; left:18px; top:10px; border:3px solid var(--white); box-shadow:0 0 0 3px var(--purple); flex-shrink:0; background:var(--white); }
+  .sesion-item:nth-child(2n) .sesion-dot { box-shadow:0 0 0 3px var(--orange-bright); }
+  .sesion-item:nth-child(3n) .sesion-dot { box-shadow:0 0 0 3px var(--teal); }
+  .sesion-card { background:var(--white); border-radius:16px; padding:22px 26px; flex:1; box-shadow:0 4px 16px rgba(0,0,0,0.06); transition:transform 0.2s; }
+  .sesion-card:hover { transform:translateX(4px); }
+  .sesion-date { font-size:0.8rem; font-weight:800; color:var(--purple-light); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }
+  .sesion-title { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+  .sesion-title .s-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .sesion-title .s-icon svg { width:18px; height:18px; }
+  .sesion-card h4 { font-weight:800; font-size:1rem; }
+  .sesion-card p { color:var(--gray); font-size:0.9rem; line-height:1.6; }
+
+  /* ALIADOS */
+  #aliados { background: var(--cream); }
+  .aliados-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .aliado-card { background:var(--white); border-radius:16px; padding:24px 22px; border-top:4px solid var(--purple); box-shadow:0 4px 16px rgba(0,0,0,0.05); transition:transform 0.2s,box-shadow 0.2s; }
+  .aliado-card:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.1); }
+  .aliado-card:nth-child(3n+2){ border-color:var(--orange); }
+  .aliado-card:nth-child(3n+3){ border-color:var(--teal); }
+  .aliado-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .aliado-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:var(--light); flex-shrink:0; }
+  .aliado-icon svg { width:20px; height:20px; stroke:var(--purple); }
+  .aliado-card:nth-child(3n+2) .aliado-icon svg { stroke:var(--orange-bright); }
+  .aliado-card:nth-child(3n+3) .aliado-icon svg { stroke:var(--teal); }
+  .aliado-name { font-weight:800; color:var(--purple-dark); font-size:0.95rem; }
+  .aliado-type { display:inline-block; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; padding:3px 10px; border-radius:50px; background:var(--light); color:var(--gray); margin-bottom:8px; }
+  .aliado-card p { font-size:0.88rem; color:var(--gray); line-height:1.55; }
+
+  /* EQUIPO */
+  #equipo { background: var(--white); }
+  .equipo-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:18px; }
+  .miembro { text-align:center; padding:24px 12px; border-radius:18px; transition:transform 0.2s; }
+  .miembro:hover { transform:translateY(-5px); }
+  .miembro-avatar { width:64px; height:64px; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-family:'Fredoka One',cursive; font-size:1.6rem; color:var(--white); }
+  .miembro:nth-child(1) .miembro-avatar{ background:var(--purple); }
+  .miembro:nth-child(2) .miembro-avatar{ background:var(--orange); }
+  .miembro:nth-child(3) .miembro-avatar{ background:var(--teal); }
+  .miembro:nth-child(4) .miembro-avatar{ background:var(--orange-bright); }
+  .miembro:nth-child(5) .miembro-avatar{ background:var(--purple-light); }
+  .miembro:nth-child(6) .miembro-avatar{ background:#EC4899; }
+  .miembro:nth-child(7) .miembro-avatar{ background:var(--purple-dark); }
+  .miembro:nth-child(8) .miembro-avatar{ background:#10B981; }
+  .miembro:nth-child(9) .miembro-avatar{ background:#EF4444; }
+  .miembro:nth-child(10) .miembro-avatar{ background:#6366F1; }
+  .miembro-name { font-weight:800; font-size:0.88rem; color:var(--purple-dark); margin-bottom:4px; }
+  .miembro-role { font-size:0.78rem; color:var(--gray); }
+  .miembro-role-icon { width:28px; height:28px; border-radius:8px; background:var(--light); margin:8px auto 0; display:flex; align-items:center; justify-content:center; }
+  .miembro-role-icon svg { width:15px; height:15px; stroke:var(--purple); }
+
+  /* ODS */
+  #ods { background:linear-gradient(135deg,var(--purple-dark) 0%,#1E1B4B 100%); }
+  #ods h2 { color:white; }
+  .ods-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  .ods-card { border-radius:20px; padding:40px 32px; text-align:center; transition:transform 0.25s; }
+  .ods-card:hover { transform:scale(1.04); }
+  .ods-card:nth-child(1){ background:rgba(245,158,11,0.15); border:2px solid rgba(245,158,11,0.4); }
+  .ods-card:nth-child(2){ background:rgba(20,184,166,0.15); border:2px solid rgba(20,184,166,0.4); }
+  .ods-card:nth-child(3){ background:rgba(147,51,234,0.25); border:2px solid rgba(147,51,234,0.5); }
+  .ods-icon-wrap { width:60px; height:60px; border-radius:18px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; }
+  .ods-card:nth-child(1) .ods-icon-wrap { background:rgba(245,158,11,0.25); }
+  .ods-card:nth-child(2) .ods-icon-wrap { background:rgba(20,184,166,0.25); }
+  .ods-card:nth-child(3) .ods-icon-wrap { background:rgba(147,51,234,0.25); }
+  .ods-icon-wrap svg { width:32px; height:32px; }
+  .ods-card:nth-child(1) .ods-icon-wrap svg { stroke:var(--orange); }
+  .ods-card:nth-child(2) .ods-icon-wrap svg { stroke:var(--teal); }
+  .ods-card:nth-child(3) .ods-icon-wrap svg { stroke:var(--purple-light); }
+  .ods-num { font-family:'Fredoka One',cursive; font-size:3rem; display:block; margin-bottom:10px; }
+  .ods-card:nth-child(1) .ods-num { color:var(--orange); }
+  .ods-card:nth-child(2) .ods-num { color:var(--teal); }
+  .ods-card:nth-child(3) .ods-num { color:var(--purple-light); }
+  .ods-card h3 { color:white; font-weight:800; font-size:1rem; margin-bottom:10px; }
+  .ods-card p { color:rgba(255,255,255,0.65); font-size:0.88rem; line-height:1.65; }
+
+  /* TESTIMONIOS */
+  #testimonios { background: var(--white); }
+  .testi-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .testi-card { background:var(--cream); border-radius:20px; padding:32px 28px; position:relative; }
+  .testi-quote { width:40px; height:40px; background:var(--purple); border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+  .testi-quote svg { width:22px; height:22px; stroke:white; }
+  .testi-card p { font-size:0.95rem; line-height:1.75; color:var(--gray); margin-bottom:18px; }
+  .testi-author { font-weight:800; color:var(--purple-dark); font-size:0.9rem; }
+  .testi-age { color:var(--gray); font-size:0.82rem; }
+
+  /* PRESUPUESTO */
+  #presupuesto { background: var(--light); }
+  .budget-summary { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:40px; }
+  .budget-box { background:var(--white); border-radius:20px; padding:30px 24px; text-align:center; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
+  .budget-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; }
+  .budget-box:nth-child(1) .budget-icon { background:rgba(107,33,168,0.1); }
+  .budget-box:nth-child(1) .budget-icon svg { stroke:var(--purple); }
+  .budget-box:nth-child(2) .budget-icon { background:rgba(249,115,22,0.1); }
+  .budget-box:nth-child(2) .budget-icon svg { stroke:var(--orange-bright); }
+  .budget-box:nth-child(3) .budget-icon { background:rgba(20,184,166,0.1); }
+  .budget-box:nth-child(3) .budget-icon svg { stroke:var(--teal); }
+  .budget-icon svg { width:26px; height:26px; }
+  .budget-box .amount { font-family:'Fredoka One',cursive; font-size:2.2rem; display:block; margin-bottom:8px; }
+  .budget-box:nth-child(1) .amount { color:var(--purple); }
+  .budget-box:nth-child(2) .amount { color:var(--orange-bright); }
+  .budget-box:nth-child(3) .amount { color:var(--teal); }
+  .budget-box .label { color:var(--gray); font-size:0.9rem; font-weight:700; }
+
+  /* FOOTER */
+  footer { background:var(--purple-dark); color:rgba(255,255,255,0.7); text-align:center; padding:50px 24px; }
+  footer .footer-logo { font-family:'Fredoka One',cursive; font-size:2.2rem; color:white; margin-bottom:10px; }
+  footer .footer-logo em { color:var(--orange); font-style:normal; }
+  footer p { font-size:0.9rem; margin-bottom:8px; }
+  .footer-icons { display:flex; justify-content:center; gap:16px; margin:20px 0; }
+  .footer-icon { width:40px; height:40px; background:rgba(255,255,255,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center; }
+  .footer-icon svg { width:22px; height:22px; stroke:var(--orange); }
+
+  /* RESPONSIVE */
+  @media (max-width:900px) {
+    nav ul { display:none; }
+    .about-grid,.temas-grid,.stats-grid,.results-grid,.aliados-grid,.equipo-grid,.ods-grid,.testi-grid,.budget-summary { grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:580px) {
+    .temas-grid,.stats-grid,.results-grid,.aliados-grid,.equipo-grid,.ods-grid,.testi-grid,.budget-summary,.about-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <span>Expres<em>alo</em></span>
+  </div>
+  <ul>
+    <li><a href="#about">El Proyecto</a></li>
+    <li><a href="#temas">Temáticas</a></li>
+    <li><a href="#impacto">Impacto</a></li>
+    <li><a href="#sesiones">Sesiones</a></li>
+    <li><a href="#aliados">Aliados</a></li>
+    <li><a href="#equipo">Equipo</a></li>
+    <li><a href="#testimonios">Testimonios</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-bg-circles"><span></span><span></span><span></span></div>
+  <div class="hero-content">
+    <div class="hero-icons">
+      <div class="hero-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      </div>
+      <div class="hero-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.5 22 2 17.5 2 12A10 10 0 0 1 12 2c.5 0 1 .03 1.5.1C11 4.5 10 7.1 10 10c0 3.9 2 7.4 5 9.5-.8.3-1.9.5-3 .5z"/></svg>
+      </div>
+      <div class="hero-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <div class="hero-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+      </div>
+    </div>
+    <h1 class="hero-title">Expres<em>alo</em></h1>
+    <p class="hero-sub">Laboratorio Socioemocional a través de las Artes</p>
+    <p class="hero-desc">Un espacio seguro donde preadolescentes de Colón desarrollan habilidades socioemocionales a través del arte visual, corporal, musical y escrito.</p>
+    <a href="#about" class="btn btn-orange">Conoce el proyecto</a>
+    <a href="#impacto" class="btn btn-outline">Ver resultados</a>
+    <div class="hero-badges">
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Nuevo Cristóbal, Colón
+      </span>
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        14 beneficiarios
+      </span>
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Abril – Mayo 2026
+      </span>
+      <span class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Colegio San José La Salle
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div>
+        <span class="section-tag">El Problema</span>
+        <h2>¿Por qué Exprésalo?</h2>
+        <p class="lead" style="margin-bottom:24px;">Muchos jóvenes presentan dificultades para reconocer, expresar y manejar sus emociones, lo que afecta su convivencia, relaciones interpersonales y trabajo colaborativo.</p>
+        <p style="color:var(--gray);line-height:1.75;">La provincia de Colón enfrenta retos vinculados a convivencia y acceso limitado a espacios formativos extracurriculares. Exprésalo crea un laboratorio educativo donde los adolescentes practican habilidades socioemocionales de forma práctica, reflexiva y colectiva a través del arte.</p>
+      </div>
+      <div class="about-visual">
+        <div class="bg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.5 22 2 17.5 2 12A10 10 0 0 1 12 2c.5 0 1 .03 1.5.1C11 4.5 10 7.1 10 10c0 3.9 2 7.4 5 9.5-.8.3-1.9.5-3 .5z"/></svg>
+        </div>
+        <h3>Nuestra misión</h3>
+        <p>Fortalecer las habilidades socioemocionales de adolescentes de la provincia de Colón mediante un laboratorio educativo basado en metodologías artísticas, promoviendo una convivencia más saludable y una participación social positiva.</p>
+        <br>
+        <p>Alineados con los ODS 4 (Educación de calidad), ODS 10 (Reducción de desigualdades) y ODS 16 (Paz, justicia e instituciones sólidas).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEMAS -->
+<section id="temas">
+  <div class="section-inner">
+    <span class="section-tag">Contenido</span>
+    <h2>Temáticas del Laboratorio</h2>
+    <p class="lead">Tres niveles de aprendizaje socioemocional que trabajan desde lo personal hasta el entorno comunitario.</p>
+    <div class="temas-grid">
+      <div class="tema-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h3>Habilidades para sí mismo</h3>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Autoconcepto e identidad personal</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Identificación emocional</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Autorregulación emocional</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Fortalezas personales</li>
+        </ul>
+      </div>
+      <div class="tema-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Habilidades entre pares</h3>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Empatía y toma de perspectiva</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Comunicación asertiva</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Escucha activa</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Resolución pacífica de conflictos</li>
+        </ul>
+      </div>
+      <div class="tema-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3>Habilidades en el entorno</h3>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Acción comunitaria colectiva</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Trabajo colaborativo</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Impacto en la comunidad</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Participación social positiva</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACTO -->
+<section id="impacto">
+  <div class="section-inner">
+    <span class="section-tag" style="background:var(--orange);">Resultados</span>
+    <h2>Impacto del Laboratorio</h2>
+    <p class="lead">Resultados medidos mediante evaluación pretest-postest aplicada a los 13 participantes evaluados.</p>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <span class="stat-num">84%</span>
+        <span class="stat-label">con mejoras claras o moderadas</span>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <span class="stat-num">61%</span>
+        <span class="stat-label">mejor autoconcepto</span>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <span class="stat-num">61%</span>
+        <span class="stat-label">mayor empatía</span>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <span class="stat-num">61%</span>
+        <span class="stat-label">resolución pacífica de conflictos</span>
+      </div>
+    </div>
+    <div class="results-grid">
+      <div class="result-item">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Autoconcepto</h4>
+        <p><span class="pct">8/13</span>participantes mostraron respuestas más positivas sobre sentirse valiosos, reconocer fortalezas y compartir ideas.</p>
+      </div>
+      <div class="result-item">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Identificación y Autorregulación</h4>
+        <p><span class="pct">7/13</span>evidenciaron mayor reconocimiento emocional y uso de estrategias para calmarse.</p>
+      </div>
+      <div class="result-item">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Empatía y Comunicación</h4>
+        <p><span class="pct">8/13</span>mejoraron en escucha activa y consideración de perspectivas ajenas.</p>
+      </div>
+      <div class="result-item">
+        <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Resolución de Conflictos</h4>
+        <p><span class="pct">8/13</span>comenzaron a elegir alternativas dialogadas y colaborativas frente a desacuerdos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SESIONES -->
+<section id="sesiones">
+  <div class="section-inner">
+    <span class="section-tag">Cronograma</span>
+    <h2>Las Sesiones del Laboratorio</h2>
+    <p class="lead" style="margin-bottom:40px;">Nueve encuentros presenciales desarrollados entre el 10 de abril y el 9 de mayo de 2026.</p>
+    <div class="sesiones-timeline">
+
+      <div class="sesion-item">
+        <span class="sesion-dot"></span>
+        <div class="sesion-card">
+          <div class="sesion-date">10 de abril · Sesión 1</div>
+          <div class="sesion-title">
+            <div class="s-icon" style="background:#EDE9FE;"><svg viewBox="0 0 24 24" fill="none" stroke="#6B21A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C6.5 22 2 17.5 2 12A10 10 0 0 1 12 2"/><path d="M12 22c1.66 0 3-4.03 3-9s-1.34-9-3-9"/><path d="M22 12H2"/></svg></div>
+            <h4>Presentación de Exprésalo + Autoconcepto</h4>
+          </div>
+          <p>Presentación del laboratorio, reglas de convivencia, entrega de materiales y primera sesión de autoconcepto con actividad del escudo personal.</p>
+        </div>
+      </div>
+
+      <div class="sesion-item">
+        <span class="sesion-dot"></span>
+        <div class="sesion-card">
+          <div class="sesion-date">17 de abril · Sesión 2</div>
+          <div class="sesion-title">
+            <div class="s-icon" style="background:#FEF3C7;"><svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+            <h4>Autoconcepto + Pretest</h4>
+          </div>
+          <p>Aplicación del pretest de evaluación socioemocional y tablero de sueños y fortalezas personales.</p>
+        </div>
+      </div>
+
+      <div class="sesion-item">
+        <span class="sesion-dot"></span>
+        <div class="sesion-card">
+          <div class="sesion-date">18 de abril · Sesión 3</div>
+          <div class="sesion-title">
+            <div class="s-icon" style="background:#CCFBF1;"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="11" cy="11" r="2"/></svg></div>
+            <h4>Autoconcepto + Identificación Emocional</h4>
+          </div>
+          <p>Máscara de yo interior vs. yo exterior, pintura abstracta de emociones y búsqueda de canciones según emociones.</p>
+        </div>
+      </div>
+
+      <div class="sesion-item">
+        <span class="sesion-dot"></span>
+        <div class="sesion-card">
+          <div class="sesion-date">24 de abril · Sesión 4</div>
+          <div class="sesion-title">
+            <div class="s-icon" style="background:#EDE9FE;"><svg viewBox="0 0 24 24" fill="none" stroke="#6B21A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+            <h4>Identificación Emocional</h4>
+          </div>
+          <p>Identificación de situaciones emocionales reales con colores y símbolos. Pintura abstracta enfocada en cómo se siente cada emoción.</p>
+        </div>
+      </div>
+
+      <div class="sesion-item">
+        <span class="sesion-dot"></span>
+        <div class="sesion-card">
+          <div class="sesion-date">25 de abril · Sesión 5</div>
+          <div class="sesion-title">
+            <div class="s-icon" style="background:#FEF3C7;"><svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+            <h4>Autorregulación + Roleplay</h4>
+          </div>
+          <p>Caja de herramientas de autorregulación, roleplay de reacciones impulsivas vs. reguladas, y guión alternativo de mi historia.</p>
+        </div>
+      </div>
+
+      <div class="sesion-item">
+        <span class="sesion-dot"></span>
+        <div class="sesion-card">
+          <div class="sesion-date">26 de abril · Gira</div>
+          <div class="sesion-title">
+            <div class="s-icon" style="background:#CCFBF1;"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div>
+            <h4>Gira Cultural – Museos de Panamá</h4>
+          </div>
+          <p>Visita al Museo MAC, Museo de la Mola y Museo AMCA como experiencia de aprendizaje artístico y socioemocional fuera del aula.</p>
+        </div>
+      </div>
+
+      <div class="sesion-item">
+        <span class="sesion-dot"></span>
+        <div class="sesion-card">
+          <div class="sesion-date">29 de abril · Sesión 6</div>
+          <div class="sesion-title">
+            <div class="s-icon" style="background:#EDE9FE;"><svg viewBox="0 0 24 24" fill="none" stroke="#6B21A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+            <h4>Empatía</h4>
+          </div>
+          <p>Máscara de lo que muestro vs. lo que siento, cartas desde el punto de vista del otro y cartas que no se envían.</p>
+        </div>
+      </div>
+
+      <div class="sesion-item">
+        <span class="sesion-dot"></span>
+        <div class="sesion-card">
+          <div class="sesion-date">6 de mayo · Sesión 7</div>
+          <div class="sesion-title">
+            <div class="s-icon" style="background:#FEF3C7;"><svg viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <h4>Comunicación Asertiva + Resolución de Conflictos</h4>
+          </div>
+          <p>Puzzle de frases agresivas transformadas a asertivas, árbol de conflictos y cómic colaborativo de solución de conflictos.</p>
+        </div>
+      </div>
+
+      <div class="sesion-item">
+        <span class="sesion-dot"></span>
+        <div class="sesion-card">
+          <div class="sesion-date">8–9 de mayo · Sesión 8 y Cierre</div>
+          <div class="sesion-title">
+            <div class="s-icon" style="background:#CCFBF1;"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+            <h4>Postest + Acción Comunitaria + Graduación</h4>
+          </div>
+          <p>Aplicación del postest, implementación del mural colectivo como acción comunitaria en el colegio y ceremonia de entrega de certificados.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ALIADOS -->
+<section id="aliados">
+  <div class="section-inner">
+    <span class="section-tag">Red de Apoyo</span>
+    <h2>Aliados del Proyecto</h2>
+    <p class="lead" style="margin-bottom:40px;">Personas, empresas y organizaciones que hicieron posible el laboratorio con sus aportes en especie y servicios.</p>
+    <div class="aliados-grid">
+      <div class="aliado-card">
+        <div class="aliado-header">
+          <div class="aliado-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+          <div class="aliado-name">QPTECH INC</div>
+        </div>
+        <span class="aliado-type">Empresa Nacional</span>
+        <p>Donó suéteres, stickers y pines que fortalecieron la identidad visual y el sentido de pertenencia del grupo.</p>
+      </div>
+      <div class="aliado-card">
+        <div class="aliado-header">
+          <div class="aliado-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+          <div class="aliado-name">ARCOR</div>
+        </div>
+        <span class="aliado-type">Empresa Nacional</span>
+        <p>Donó cuadernos, termos y alimentos utilizados en distintas jornadas del laboratorio.</p>
+      </div>
+      <div class="aliado-card">
+        <div class="aliado-header">
+          <div class="aliado-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div class="aliado-name">Universidad de O'Higgins</div>
+        </div>
+        <span class="aliado-type">Aliado Internacional · Chile</span>
+        <p>Brindó asesoría y retroalimentación externa en tres sesiones virtuales para fortalecer la planificación.</p>
+      </div>
+      <div class="aliado-card">
+        <div class="aliado-header">
+          <div class="aliado-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+          <div class="aliado-name">Maxitools S.A.</div>
+        </div>
+        <span class="aliado-type">Empresa Nacional</span>
+        <p>Donó materiales de pintura, pinceles y cartulinas para las actividades artísticas.</p>
+      </div>
+      <div class="aliado-card">
+        <div class="aliado-header">
+          <div class="aliado-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+          <div class="aliado-name">RCH Mentes Brillantes</div>
+        </div>
+        <span class="aliado-type">Organización Educativa</span>
+        <p>Préstamo y donación de marcadores, hojas y materiales reutilizables para dinámicas grupales.</p>
+      </div>
+      <div class="aliado-card">
+        <div class="aliado-header">
+          <div class="aliado-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="aliado-name">AEPSI</div>
+        </div>
+        <span class="aliado-type">Asociación Nacional</span>
+        <p>Compartió observaciones y recomendaciones para fortalecer distintos aspectos de la ejecución.</p>
+      </div>
+      <div class="aliado-card">
+        <div class="aliado-header">
+          <div class="aliado-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="aliado-name">Lic. Kiria Moreno</div>
+        </div>
+        <span class="aliado-type">Asesoría Psicológica</span>
+        <p>Orientó el componente socioemocional del proyecto y las responsabilidades éticas del trabajo con jóvenes.</p>
+      </div>
+      <div class="aliado-card">
+        <div class="aliado-header">
+          <div class="aliado-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+          <div class="aliado-name">Programador Cesar Villamil</div>
+        </div>
+        <span class="aliado-type">Apoyo Tecnológico</span>
+        <p>Desarrolló la página web y el chatbot del proyecto, integrando Inteligencia Artificial como apoyo.</p>
+      </div>
+      <div class="aliado-card">
+        <div class="aliado-header">
+          <div class="aliado-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <div class="aliado-name">Entre_Maderas_C3</div>
+        </div>
+        <span class="aliado-type">Emprendimiento</span>
+        <p>Donó alimentos y materiales para las actividades y la ceremonia de graduación del proyecto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ODS -->
+<section id="ods">
+  <div class="section-inner">
+    <span class="section-tag" style="background:var(--teal);">Agenda 2030</span>
+    <h2>ODS Impactados</h2><br>
+    <div class="ods-grid">
+      <div class="ods-card">
+        <div class="ods-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <span class="ods-num">4</span>
+        <h3>Educación de Calidad</h3>
+        <p>Fortalecimiento de capacidades personales y habilidades socioemocionales mediante metodologías artísticas, promoviendo un aprendizaje práctico, significativo e inclusivo.</p>
+      </div>
+      <div class="ods-card">
+        <div class="ods-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <span class="ods-num">10</span>
+        <h3>Reducción de las Desigualdades</h3>
+        <p>Promoción de la integración, participación y expresión de adolescentes, fortaleciendo la igualdad de oportunidades dentro del grupo.</p>
+      </div>
+      <div class="ods-card">
+        <div class="ods-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 0 0 6.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 0 0 6.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+        </div>
+        <span class="ods-num">16</span>
+        <h3>Paz, Justicia e Instituciones</h3>
+        <p>Fortalecimiento de espacios de respeto, diálogo y participación pacífica entre adolescentes, contribuyendo a una mejor convivencia comunitaria.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios">
+  <div class="section-inner">
+    <span class="section-tag">Voces del Laboratorio</span>
+    <h2>Lo que dijeron los participantes</h2>
+    <p class="lead" style="margin-bottom:40px;">Testimonios reales recogidos al finalizar el laboratorio.</p>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-quote"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg></div>
+        <p>En Exprésalo entendí que aunque yo sienta demasiado, también puedo aprender a calmarme y no dejar que todo me sobrepase. Poco a poco me fui sintiendo más segura.</p>
+        <div class="testi-author">Jimena Abigail Lara Bonilla</div>
+        <div class="testi-age">14 años · Participante</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg></div>
+        <p>Descubrí que soy una persona que sí sabe demostrar cariño. Aprendí que antes de reaccionar tengo que pensar mejor las cosas y ponerme en el lugar de los demás.</p>
+        <div class="testi-author">Jean Carlos Berrío Estrada</div>
+        <div class="testi-age">15 años · Participante</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg></div>
+        <p>Siento que ella aprendió a pensar mejor las cosas antes de hablar y a expresarse sin herir a los demás. Hoy en día hacen mucha falta espacios así para los jóvenes.</p>
+        <div class="testi-author">Leysmi Gómez</div>
+        <div class="testi-age">Madre de Danna Pineda</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-quote"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg></div>
+        <p>El laboratorio le ayudó bastante a manejar mejor sus emociones y a sentirse cómoda siendo ella misma. Ojalá proyectos así duren más tiempo porque realmente ayudan a los jóvenes.</p>
+        <div class="testi-author">Saidy Bonilla</div>
+        <div class="testi-age">Madre de Jimena Lara</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESUPUESTO -->
+<section id="presupuesto">
+  <div class="section-inner">
+    <span class="section-tag">Finanzas</span>
+    <h2>Ejecución Presupuestaria</h2>
+    <p class="lead" style="margin-bottom:36px;">El laboratorio se ejecutó con un presupuesto directo de B/.300.00 y una cofinanciación en especie que amplió significativamente los recursos disponibles.</p>
+    <div class="budget-summary">
+      <div class="budget-box">
+        <div class="budget-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+        <span class="amount">B/.300.00</span>
+        <span class="label">Presupuesto total asignado</span>
+      </div>
+      <div class="budget-box">
+        <div class="budget-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <span class="amount">B/.297.13</span>
+        <span class="label">Gasto real ejecutado</span>
+      </div>
+      <div class="budget-box">
+        <div class="budget-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <span class="amount">B/.1,887+</span>
+        <span class="label">Cofinanciación en especie</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO -->
+<section id="equipo">
+  <div class="section-inner">
+    <span class="section-tag">Grupo #2</span>
+    <h2>El Equipo Exprésalo</h2>
+    <p class="lead" style="margin-bottom:40px;">Diez integrantes comprometidos con el desarrollo socioemocional de los jóvenes de Colón.</p>
+    <div class="equipo-grid">
+      <div class="miembro"><div class="miembro-avatar">R</div><div class="miembro-name">Roselyn Montenegro</div><div class="miembro-role">Coordinadora General</div></div>
+      <div class="miembro"><div class="miembro-avatar">H</div><div class="miembro-name">Héctor Demera</div><div class="miembro-role">Presupuesto</div></div>
+      <div class="miembro"><div class="miembro-avatar">G</div><div class="miembro-name">Gabriela Rodríguez</div><div class="miembro-role">Alianzas</div></div>
+      <div class="miembro"><div class="miembro-avatar">I</div><div class="miembro-name">Ilanit Jaén</div><div class="miembro-role">Investigación</div></div>
+      <div class="miembro"><div class="miembro-avatar">H</div><div class="miembro-name">Helen Rodríguez</div><div class="miembro-role">Redes Sociales</div></div>
+      <div class="miembro"><div class="miembro-avatar">G</div><div class="miembro-name">Genyelis López</div><div class="miembro-role">Secretaría</div></div>
+      <div class="miembro"><div class="miembro-avatar">S</div><div class="miembro-name">Solangel Jaén</div><div class="miembro-role">Alianzas</div></div>
+      <div class="miembro"><div class="miembro-avatar">V</div><div class="miembro-name">Victoria Alvarado</div><div class="miembro-role">Redes Sociales</div></div>
+      <div class="miembro"><div class="miembro-avatar">Y</div><div class="miembro-name">Yerry Rodríguez</div><div class="miembro-role">Investigación</div></div>
+      <div class="miembro"><div class="miembro-avatar">K</div><div class="miembro-name">Klarihel Valdés</div><div class="miembro-role">Documentación</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">éxpres<em>alo</em></div>
+  <p>Laboratorio Socioemocional a través de las Artes</p>
+  <div class="footer-icons">
+    <div class="footer-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="11" cy="11" r="2"/></svg></div>
+    <div class="footer-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+    <div class="footer-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+    <div class="footer-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+  </div>
+  <p>Nuevo Cristóbal, Barrio Este · Colón, Panamá</p>
+  <p style="margin-top:6px;">Colegio San José La Salle · Grupo #2 · LLAC 1.0 · 2026</p>
+  <p style="margin-top:24px;font-size:0.78rem;opacity:0.5;">Proyecto desarrollado entre el 10 de abril y el 9 de mayo de 2026</p>
+</footer>
+
+
+
+<script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2026/05/28/20/20260528204557-LLOER99V.js" defer></script>
+    
+</body>
+</html>
